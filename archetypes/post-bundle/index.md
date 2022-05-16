@@ -27,7 +27,7 @@ resources:
 - name: featured-image-preview
   src: featured-image-preview.jpg
 
-draft: true
+draft: false
 
 subtitle: ""
 
