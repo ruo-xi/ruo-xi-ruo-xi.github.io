@@ -1,6 +1,6 @@
 ---
-title: "{{ replace .Name "-" " " | title }}"
-date: {{ .Date }}
+title: "Linux Start"
+date: 2022-06-21T11:26:42+08:00
 weight: 0
 
 toc:
@@ -17,7 +17,8 @@ lightgallery: true
 seo:
   images: []
 
-description: ""
+summary: ""
+description: "pre-work for reading the source code of the linux"
 keywords: ""
 
 resources:
@@ -31,11 +32,11 @@ draft: false
 subtitle: ""
 
 tags:
+  - linux
+  - source
 
 categories:
-
-summary: ""
+  - linux source
 
 ---
-
 

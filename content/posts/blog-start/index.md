@@ -40,6 +40,7 @@ tags:
 - hugo
 
 categories:
+- blog
 
 ---
 
@@ -69,6 +70,10 @@ cp -r themes/FixIt/exampleSite/* .
 ```bash
 git clone --depth 1 https://github.com/Lruihao/FixIt.git themes/FixIt
 git submodule add https://github.com/Lruihao/FixIt.git themes/FixIt 
+
+
+git clone --depth 1 https://github.com/dillonzq/LoveIt themes/LoveIt
+git submodule add https://github.com/dillonzq/LoveIt themes/LoveIt 
 ```
 ####  update theme
 ```bash

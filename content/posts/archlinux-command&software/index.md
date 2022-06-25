@@ -32,14 +32,29 @@ draft: true
 subtitle: ""
 
 tags:
+- daily
+- archlinux
 
 categories:
+- archlinux
 
 ---
 
 ### CommandLine command
 
-#### text resolve
+#### text 
+
+##### view
+* cat    (bat)
+* more
+* less
+* head
+* tail
+
+##### edit
+* neovim
+
+##### processing
 * sed
 * awk
 * grep
@@ -47,43 +62,80 @@ categories:
 * sort
 * uniq
 * wc
-* shuf     
+* shuf
 * tee
 
-#### System Monitor
+#### system 
+
+##### monitor
 * ps
+* top    (bpytop bottom(btm))
 
-#### File Manage
-* rm
-* touch
+##### disk usage
+* du (dust)
 
-#### text view
-* cat
-* more
-* less
-* head
-* tail
 
-#### find file
-* which
-* find
-
-#### Command
+##### exec command
 * xargs
 
+#### File/Dir
+
+##### manager
+* ranegr
+* if
+
+##### file jump
+* cd (zoxide)
+
+##### manage
+* rm
+* touch
+* mkdir
+* chmod
+
+##### find
+* which
+* find    (fd)
+
+
 #### Net
+
+##### connect
 * ssh
 * scp
-* ifconfig   ip
-* netstat   ss
+
+##### info
+* ifconfig   (ip)
+* netstat   (ss)
 * ping
-* host   dig
+* host   
+* dig
 * shuf     
 
-### file convert
-* yj      (toml yaml json HCL)
-* mogrify        (image)
 
+#### MISC
+
+##### video player
+* mpv
+
+##### audio player
+* cmus
+
+##### speedup coding speed
+* gtypist
+
+##### file convert
+* yj      [toml yaml json HCL]
+* mogrify        [image]
+
+##### devices control
+* usbUtils   (lsusb)
+
+#### package manager
+
+##### Archlinux
+* yay
+* paru
 
 
 ### desktop environment
@@ -91,19 +143,29 @@ categories:
 #### xorg
 * i3wm
 * picom
+
+##### application luncher
 * rofi
 
 #### wayland 
-* sway
-* wayfire
-* foot
-* kitty
-* wofi
+
+##### desktop environment
+* sway (waybar, swayidle)
+* wayfire 
+
+##### graph env info
+* wlr-randr   get the output info
+
 ##### screenshot
 * grim slurp grimshot
 
+##### terminal emulator
+* foot
+* kitty
+* alacritty
 
-### emulator
+##### application luncher
+* wofi
 
 #### anbox
 ##### install
