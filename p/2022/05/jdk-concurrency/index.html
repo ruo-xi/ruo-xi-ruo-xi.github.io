@@ -1,0 +1,379 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Jdk Concurrency - ruo-xi's blog</title><meta name=Description content="ruo-xi's blog"><meta property="og:title" content="Jdk Concurrency"><meta property="og:description" content="java concurrency study"><meta property="og:type" content="article"><meta property="og:url" content="https://ruo-xi.github.io/p/2022/05/jdk-concurrency/"><meta property="og:image" content="https://ruo-xi.github.io/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-05-24T15:29:04+08:00"><meta property="article:modified_time" content="2022-06-25T17:53:09+08:00"><meta property="og:site_name" content="ruo-xi's blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://ruo-xi.github.io/logo.png"><meta name=twitter:title content="Jdk Concurrency"><meta name=twitter:description content="java concurrency study"><meta name=application-name content="ruo-xi's blog"><meta name=apple-mobile-web-app-title content="ruo-xi's blog"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ruo-xi.github.io/p/2022/05/jdk-concurrency/><link rel=prev href=https://ruo-xi.github.io/p/2022/05/jdk-start/><link rel=next href=https://ruo-xi.github.io/p/2022/06/linux-start/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Jdk Concurrency","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ruo-xi.github.io\/p\/2022\/05\/jdk-concurrency\/"},"image":[{"@type":"ImageObject","url":"https:\/\/ruo-xi.github.io\/images\/Apple-Devices-Preview.png","width":2880,"height":1578}],"genre":"posts","keywords":"jdk, java","wordcount":954,"url":"https:\/\/ruo-xi.github.io\/p\/2022\/05\/jdk-concurrency\/","datePublished":"2022-05-24T15:29:04+08:00","dateModified":"2022-06-25T17:53:09+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"ruo-xi","logo":{"@type":"ImageObject","url":"https:\/\/ruo-xi.github.io\/images\/avatar.png","width":700,"height":933}},"author":{"@type":"Person","name":"ruo-xi"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="ruo-xi's blog">ruo-xi's blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>Posts </a><a class=menu-item href=/tags/>Tags </a><a class=menu-item href=/categories/>Categories </a><a class=menu-item href=/categories/documentation/>Docs </a><a class=menu-item href=/about/>About </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="ruo-xi's blog">ruo-xi's blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/categories/documentation/ title>Docs</a><a class=menu-item href=/about/ title>About</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Jdk Concurrency</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://ruo-xi.github.io title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>ruo-xi</a></span>&nbsp;<span class=post-category>included in <a href=/categories/jdk/><i class="far fa-folder fa-fw" aria-hidden=true></i>jdk</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2022-05-24>2022-05-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;954 words&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;5 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#conception>conception</a></li><li><a href=#feature>Feature</a><ul><li><a href=#visibility>visibility</a></li><li><a href=#orderliness>orderliness</a></li><li><a href=#atomicity>atomicity</a></li></ul></li><li><a href=#fundamental-principle>fundamental principle</a><ul><li><a href=#volatile>volatile</a><ul><li><a href=#feature-1>feature</a></li><li><a href=#source>source</a><ul><li><a href=#bytecode>bytecode</a></li><li><a href=#template>template</a><ul><li><a href=#confirm>confirm</a></li></ul></li></ul></li></ul></li></ul></li><li><a href=#reference>reference</a></li></ul></nav></div></div><div class=content id=content><h1 id=concurrency>Concurrency</h1><h2 id=conception>conception</h2><ul><li><p>concurrent(concurrency)</p><p>when two or more tasks can start, run, and complete in overlapping time periods. It doesn&rsquo;t necessarily mean they&rsquo;ll ever both be running at the same instant</p></li><li><p>parallel(parallelism)</p><p>when tasks literally run at the same time, e.g., on a multicore processor.</p></li></ul><p>cache line size /proc/cpuinfo cache_alignment : 64 byte</p><h2 id=feature>Feature</h2><p>bug source visibility, orderliness, atomicity</p><h3 id=visibility>visibility</h3><ul><li>volatile</li><li>memory fence</li><li>synchronized</li><li>Lock</li><li>final</li></ul><h3 id=orderliness>orderliness</h3><ul><li>volatile</li><li>memory fence</li><li>synchronized</li><li>Lock</li></ul><h3 id=atomicity>atomicity</h3><ul><li>synchronized</li><li>Lock</li><li>CAS</li></ul><h2 id=fundamental-principle>fundamental principle</h2><h3 id=volatile>volatile</h3><h4 id=feature-1>feature</h4><ul><li><p>visibility</p><p>each writing of a variable decorated by volatile can be awared for each thread</p><p>对一个volatile变量的读，总是能看到（任意线程）对这个volatile变量最后的写入。</p></li><li><p>atomicity</p><p>read/write is a atomic op for variable decorated by volatile</p><p>对任意单个volatile变量的读/写具有原子性，但类似于volatile++这种复合操作不具有原子性（基于这点，我们通过会认为volatile不具备原子性）。volatile仅仅保证对单个volatile变量的读/写具有原子性，而锁的互斥执行的特性可以确保对整个临界区代码的执行具有原子性。</p><blockquote><p>64位的long型和double型变量，只要它是volatile变量，对该变量的读/写就具有原子性。</p></blockquote></li><li><p>orderliness</p><p>对volatile修饰的变量的读写操作前后加上各种特定的内存屏障来禁止指令重排序来保障有序性。</p></li></ul><h4 id=source>source</h4><h5 id=bytecode>bytecode</h5><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// src/hotspot/share/interpreter/zero/bytecodeInterpreter.cpp
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=n>CASE</span><span class=p>(</span><span class=n>_putfield</span><span class=p>)</span><span class=o>:</span>
+</span></span><span class=line><span class=cl><span class=n>CASE</span><span class=p>(</span><span class=n>_putstatic</span><span class=p>)</span><span class=o>:</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=p>...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>cache</span><span class=o>-&gt;</span><span class=n>is_volatile</span><span class=p>())</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=p>...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>OrderAccess</span><span class=o>::</span><span class=n>storeload</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> 
+</span></span><span class=line><span class=cl>  
+</span></span><span class=line><span class=cl>  <span class=n>UPDATE_PC_AND_TOS_AND_CONTINUE</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=n>count</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// src/hotspot/share/interpreter/zero/bytecodeInterpreter.cpp
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=p>...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&#34;runtime/orderAccess.hpp&#34;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=p>...</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// src/hotspot/share/runtime/orderAccess.hpp 
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=n>class</span> <span class=nl>OrderAccess</span> <span class=p>:</span> <span class=n>public</span> <span class=n>AllStatic</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl> <span class=nl>public</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// barriers
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>static</span> <span class=kt>void</span>     <span class=n>loadload</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=kt>void</span>     <span class=nf>storestore</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=kt>void</span>     <span class=nf>loadstore</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=kt>void</span>     <span class=nf>storeload</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=kt>void</span>     <span class=nf>acquire</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=kt>void</span>     <span class=nf>release</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=kt>void</span>     <span class=nf>fence</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=p>...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>OS_CPU_HEADER(orderAccess)</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1>// src/hotspot/os_cpu/linux_x86/orderAccess_linux_x86.hpp
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=kt>void</span> <span class=n>OrderAccess</span><span class=o>::</span><span class=n>loadload</span><span class=p>()</span>   <span class=p>{</span> <span class=n>compiler_barrier</span><span class=p>();</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=kt>void</span> <span class=n>OrderAccess</span><span class=o>::</span><span class=n>storestore</span><span class=p>()</span> <span class=p>{</span> <span class=n>compiler_barrier</span><span class=p>();</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=kt>void</span> <span class=n>OrderAccess</span><span class=o>::</span><span class=n>loadstore</span><span class=p>()</span>  <span class=p>{</span> <span class=n>compiler_barrier</span><span class=p>();</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=kt>void</span> <span class=n>OrderAccess</span><span class=o>::</span><span class=n>storeload</span><span class=p>()</span>  <span class=p>{</span> <span class=n>fence</span><span class=p>();</span>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=kt>void</span> <span class=n>OrderAccess</span><span class=o>::</span><span class=n>acquire</span><span class=p>()</span>    <span class=p>{</span> <span class=n>compiler_barrier</span><span class=p>();</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=kt>void</span> <span class=n>OrderAccess</span><span class=o>::</span><span class=n>release</span><span class=p>()</span>    <span class=p>{</span> <span class=n>compiler_barrier</span><span class=p>();</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=kt>void</span> <span class=n>OrderAccess</span><span class=o>::</span><span class=n>fence</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=c1>// always use locked addl since mfence is sometimes expensive
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=cp>#ifdef AMD64
+</span></span></span><span class=line><span class=cl><span class=cp></span>  <span class=n>__asm__</span> <span class=k>volatile</span> <span class=p>(</span><span class=s>&#34;lock; addl $0,0(%%rsp)&#34;</span> <span class=o>:</span> <span class=o>:</span> <span class=o>:</span> <span class=s>&#34;cc&#34;</span><span class=p>,</span> <span class=s>&#34;memory&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#else
+</span></span></span><span class=line><span class=cl><span class=cp></span>  <span class=n>__asm__</span> <span class=k>volatile</span> <span class=p>(</span><span class=s>&#34;lock; addl $0,0(%%esp)&#34;</span> <span class=o>:</span> <span class=o>:</span> <span class=o>:</span> <span class=s>&#34;cc&#34;</span><span class=p>,</span> <span class=s>&#34;memory&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>  <span class=n>compiler_barrier</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h5 id=template>template</h5><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// src/hotspot/share/interpreter/templateInterpreter.cpp 
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=n>TemplateInterpreter</span><span class=o>::</span><span class=n>initialize_code</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>AbstractInterpreter</span><span class=o>::</span><span class=n>initialize</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>TemplateTable</span><span class=o>::</span><span class=n>initialize</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=p>...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// src/hotspot/share/interpreter/templateTable.cpp
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=n>TemplateTable</span><span class=o>::</span><span class=n>initialize</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=p>...</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>def</span><span class=p>(</span><span class=n>Bytecodes</span><span class=o>::</span><span class=n>_getstatic</span>           <span class=p>,</span> <span class=n>ubcp</span><span class=o>|</span><span class=n>____</span><span class=o>|</span><span class=n>clvm</span><span class=o>|</span><span class=n>____</span><span class=p>,</span> <span class=n>vtos</span><span class=p>,</span> <span class=n>vtos</span><span class=p>,</span> <span class=n>getstatic</span>           <span class=p>,</span> <span class=n>f1_byte</span>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>def</span><span class=p>(</span><span class=n>Bytecodes</span><span class=o>::</span><span class=n>_putstatic</span>           <span class=p>,</span> <span class=n>ubcp</span><span class=o>|</span><span class=n>____</span><span class=o>|</span><span class=n>clvm</span><span class=o>|</span><span class=n>____</span><span class=p>,</span> <span class=n>vtos</span><span class=p>,</span> <span class=n>vtos</span><span class=p>,</span> <span class=n>putstatic</span>           <span class=p>,</span> <span class=n>f2_byte</span>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>def</span><span class=p>(</span><span class=n>Bytecodes</span><span class=o>::</span><span class=n>_getfield</span>            <span class=p>,</span> <span class=n>ubcp</span><span class=o>|</span><span class=n>____</span><span class=o>|</span><span class=n>clvm</span><span class=o>|</span><span class=n>____</span><span class=p>,</span> <span class=n>vtos</span><span class=p>,</span> <span class=n>vtos</span><span class=p>,</span> <span class=n>getfield</span>            <span class=p>,</span> <span class=n>f1_byte</span>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>def</span><span class=p>(</span><span class=n>Bytecodes</span><span class=o>::</span><span class=n>_putfield</span>            <span class=p>,</span> <span class=n>ubcp</span><span class=o>|</span><span class=n>____</span><span class=o>|</span><span class=n>clvm</span><span class=o>|</span><span class=n>____</span><span class=p>,</span> <span class=n>vtos</span><span class=p>,</span> <span class=n>vtos</span><span class=p>,</span> <span class=n>putfield</span>            <span class=p>,</span> <span class=n>f2_byte</span>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=p>...</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span><span class=lnt>85
+</span><span class=lnt>86
+</span><span class=lnt>87
+</span><span class=lnt>88
+</span><span class=lnt>89
+</span><span class=lnt>90
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// src/hotspot/cpu/x86/templateTable_x86.cpp
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=n>TemplateTable</span><span class=o>::</span><span class=n>putfield</span><span class=p>(</span><span class=kt>int</span> <span class=n>byte_no</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>putfield_or_static</span><span class=p>(</span><span class=n>byte_no</span><span class=p>,</span> <span class=nb>false</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=n>TemplateTable</span><span class=o>::</span><span class=n>putstatic</span><span class=p>(</span><span class=kt>int</span> <span class=n>byte_no</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>putfield_or_static</span><span class=p>(</span><span class=n>byte_no</span><span class=p>,</span> <span class=nb>true</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=n>TemplateTable</span><span class=o>::</span><span class=n>putfield_or_static</span><span class=p>(</span><span class=kt>int</span> <span class=n>byte_no</span><span class=p>,</span> <span class=kt>bool</span> <span class=n>is_static</span><span class=p>,</span> <span class=n>RewriteControl</span> <span class=n>rc</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>transition</span><span class=p>(</span><span class=n>vtos</span><span class=p>,</span> <span class=n>vtos</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=n>Register</span> <span class=n>cache</span> <span class=o>=</span> <span class=n>rcx</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=n>Register</span> <span class=n>index</span> <span class=o>=</span> <span class=n>rdx</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=n>Register</span> <span class=n>obj</span>   <span class=o>=</span> <span class=n>rcx</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=n>Register</span> <span class=n>off</span>   <span class=o>=</span> <span class=n>rbx</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=n>Register</span> <span class=n>flags</span> <span class=o>=</span> <span class=n>rax</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>resolve_cache_and_index</span><span class=p>(</span><span class=n>byte_no</span><span class=p>,</span> <span class=n>cache</span><span class=p>,</span> <span class=n>index</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>u2</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>  <span class=n>jvmti_post_field_mod</span><span class=p>(</span><span class=n>cache</span><span class=p>,</span> <span class=n>index</span><span class=p>,</span> <span class=n>is_static</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>load_field_cp_cache_entry</span><span class=p>(</span><span class=n>obj</span><span class=p>,</span> <span class=n>cache</span><span class=p>,</span> <span class=n>index</span><span class=p>,</span> <span class=n>off</span><span class=p>,</span> <span class=n>flags</span><span class=p>,</span> <span class=n>is_static</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// [jk] not needed currently
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>// volatile_barrier(Assembler::Membar_mask_bits(Assembler::LoadStore |
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=c1>//                                              Assembler::StoreStore));
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>  <span class=n>Label</span> <span class=n>notVolatile</span><span class=p>,</span> <span class=n>Done</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>__</span> <span class=nf>movl</span><span class=p>(</span><span class=n>rdx</span><span class=p>,</span> <span class=n>flags</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>__</span> <span class=nf>shrl</span><span class=p>(</span><span class=n>rdx</span><span class=p>,</span> <span class=n>ConstantPoolCacheEntry</span><span class=o>::</span><span class=n>is_volatile_shift</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>__</span> <span class=nf>andl</span><span class=p>(</span><span class=n>rdx</span><span class=p>,</span> <span class=mh>0x1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// Check for volatile store
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>__</span> <span class=nf>testl</span><span class=p>(</span><span class=n>rdx</span><span class=p>,</span> <span class=n>rdx</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>__</span> <span class=nf>jcc</span><span class=p>(</span><span class=n>Assembler</span><span class=o>::</span><span class=n>zero</span><span class=p>,</span> <span class=n>notVolatile</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>putfield_or_static_helper</span><span class=p>(</span><span class=n>byte_no</span><span class=p>,</span> <span class=n>is_static</span><span class=p>,</span> <span class=n>rc</span><span class=p>,</span> <span class=n>obj</span><span class=p>,</span> <span class=n>off</span><span class=p>,</span> <span class=n>flags</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>volatile_barrier</span><span class=p>(</span><span class=n>Assembler</span><span class=o>::</span><span class=n>Membar_mask_bits</span><span class=p>(</span><span class=n>Assembler</span><span class=o>::</span><span class=n>StoreLoad</span> <span class=o>|</span>
+</span></span><span class=line><span class=cl>                                               <span class=n>Assembler</span><span class=o>::</span><span class=n>StoreStore</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>  <span class=n>__</span> <span class=nf>jmp</span><span class=p>(</span><span class=n>Done</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=n>__</span> <span class=nf>bind</span><span class=p>(</span><span class=n>notVolatile</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>putfield_or_static_helper</span><span class=p>(</span><span class=n>byte_no</span><span class=p>,</span> <span class=n>is_static</span><span class=p>,</span> <span class=n>rc</span><span class=p>,</span> <span class=n>obj</span><span class=p>,</span> <span class=n>off</span><span class=p>,</span> <span class=n>flags</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>__</span> <span class=nf>bind</span><span class=p>(</span><span class=n>Done</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=n>TemplateTable</span><span class=o>::</span><span class=n>volatile_barrier</span><span class=p>(</span><span class=n>Assembler</span><span class=o>::</span><span class=n>Membar_mask_bits</span> <span class=n>order_constraint</span> <span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// Helper function to insert a is-volatile test and memory barrier
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>__</span> <span class=n>membar</span><span class=p>(</span><span class=n>order_constraint</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=n>Assembler</span><span class=o>::</span><span class=n>membar</span><span class=p>(</span><span class=n>Membar_mask_bits</span> <span class=n>order_constraint</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// We only have to handle StoreLoad
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=n>order_constraint</span> <span class=o>&amp;</span> <span class=n>StoreLoad</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// All usable chips support &#34;locked&#34; instructions which suffice
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// as barriers, and are much faster than the alternative of
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// using cpuid instruction. We use here a locked add [esp-C],0.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// This is conveniently otherwise a no-op except for blowing
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// flags, and introducing a false dependency on target memory
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// location. We can&#39;t do anything with flags, but we can avoid
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// memory dependencies in the current method by locked-adding
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// somewhere else on the stack. Doing [esp+C] will collide with
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// something on stack in current method, hence we go for [esp-C].
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// It is convenient since it is almost always in data cache, for
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// any small C.  We need to step back from SP to avoid data
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// dependencies with other things on below SP (callee-saves, for
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// example). Without a clear way to figure out the minimal safe
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// distance from SP, it makes sense to step back the complete
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// cache line, as this will also avoid possible second-order effects
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// with locked ops against the cache line. Our choice of offset
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// is bounded by x86 operand encoding, which should stay within
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// [-128; +127] to have the 8-byte displacement encoding.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// Any change to this code may need to revisit other places in
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// the code where this idiom is used, in particular the
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// orderAccess code.
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>offset</span> <span class=o>=</span> <span class=o>-</span><span class=n>VM_Version</span><span class=o>::</span><span class=n>L1_line_size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>offset</span> <span class=o>&lt;</span> <span class=o>-</span><span class=mi>128</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>offset</span> <span class=o>=</span> <span class=o>-</span><span class=mi>128</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>lock</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=n>addl</span><span class=p>(</span><span class=n>Address</span><span class=p>(</span><span class=n>rsp</span><span class=p>,</span> <span class=n>offset</span><span class=p>),</span> <span class=mi>0</span><span class=p>);</span><span class=c1>// Assert the lock# signal here
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h6 id=confirm>confirm</h6><p>confirm by add <strong>-Xcomp</strong> <strong>-XX:+UnlockDiagnosticVMOptions</strong> <strong>-XX:+PrintAssembly</strong> vm options to output assemble code, and you need to add <strong>hsdis-amd64.so</strong> to <strong>{JDK11_HOME}/lib/</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>  java -XX:+UnlockDiagnosticVMOptions -XX:+PrintAssembly -Xcomp src/main/java/top/laonaailifa/jdk/concurrent/test/Visibility.java &gt; output_file
+</span></span><span class=line><span class=cl>  grep <span class=s2>&#34;putfield flag &#34;</span> --after-context<span class=o>=</span><span class=m>2</span> output_file
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  output: 
+</span></span><span class=line><span class=cl>    4140204:  0x00007f4e49557cad: lock addl <span class=nv>$0</span>x0,-0x40<span class=o>(</span>%rsp<span class=o>)</span>  <span class=p>;</span>*putfield flag <span class=o>{</span><span class=nv>reexecute</span><span class=o>=</span><span class=m>0</span> <span class=nv>rethrow</span><span class=o>=</span><span class=m>0</span> <span class=nv>return_oop</span><span class=o>=</span>0<span class=o>}</span>
+</span></span><span class=line><span class=cl>    4140205-                           <span class=p>;</span> - top.laonaailifa.jdk.concurrent.test.Visibility::&lt;init&gt;@6 <span class=o>(</span>line 7<span class=o>)</span>
+</span></span><span class=line><span class=cl>    4140206-                           <span class=p>;</span> - top.laonaailifa.jdk.concurrent.test.Visibility::main@5 <span class=o>(</span>line 59<span class=o>)</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=reference>reference</h2><ul><li><a href=https://stackoverflow.com/questions/1050222/what-is-the-difference-between-concurrency-and-parallelism target=_blank rel="noopener noreffer">What is the difference between concurrency and parallelism?</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2022-06-25&nbsp;<a class=git-hash href=https://github.com/ruo-xi/ruo-xi.github.io/commit/ed47c05c1ab3d8784b0faa36b9d8f7e18520d827 target=_blank title="commit by ruo-xi(314386327@qq.com) ed47c05c1ab3d8784b0faa36b9d8f7e18520d827: git push before reinstall system">
+<i class="fas fa-hashtag fa-fw" aria-hidden=true></i>ed47c05</a></span></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/p/2022/05/jdk-concurrency/index.md target=_blank>Read Markdown</a></span></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/jdk/>jdk</a>,&nbsp;<a href=/tags/java/>java</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/p/2022/05/jdk-start/ class=prev rel=prev title="Jdk Start"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Jdk Start</a>
+<a href=/p/2022/06/linux-start/ class=next rel=next title="Linux Start">Linux Start<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.101.0">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://ruo-xi.github.io target=_blank>ruo-xi</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:50},comment:{},lightgallery:!0,search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
